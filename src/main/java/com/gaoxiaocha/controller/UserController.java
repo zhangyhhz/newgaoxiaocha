@@ -29,6 +29,15 @@ public class UserController {
     @Autowired
     private StuService stuService;
 
+    /**
+     * 注册
+     * @param account
+     * @param password
+     * @param stuNo
+     * @param userName
+     * @param userAvl
+     * @return
+     */
     @RequestMapping(value = "/user/signup", method = RequestMethod.POST)
     @ResponseBody
     public String signup(@RequestParam("id") String account,
@@ -73,6 +82,12 @@ public class UserController {
         return JSONObject.toJSONString(result);
     }
 
+    /**
+     * 注册
+     * @param account
+     * @param password
+     * @return
+     */
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestParam("id") String account,

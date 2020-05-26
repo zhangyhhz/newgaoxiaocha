@@ -24,6 +24,12 @@ public class ClassController {
     @Autowired
     private ClassService classService;
 
+
+    /**
+     * 课表查询
+     * @param stuNo
+     * @return
+     */
     @RequestMapping(value = "/class/student", method = RequestMethod.GET)
     @ResponseBody
     public String showClass(@RequestParam("stuNo") String stuNo) {
