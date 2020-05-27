@@ -6,6 +6,7 @@ import com.gaoxiaocha.pojo.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * UserService
@@ -37,5 +38,19 @@ public class UserService {
         } else {
             return null;
         }
+    }
+
+    public List<User> searchByAccount(String userName) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name",userName);
+        List<User> users = userMapper.selectList(queryWrapper);
+        return users;
+    }
+
+    public User searchByStuNo(String stuNo) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_stu_no", stuNo);
+        User user = userMapper.selectOne(queryWrapper);
+        return user;
     }
 }

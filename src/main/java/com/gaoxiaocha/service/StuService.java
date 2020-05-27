@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+/**
+ * StuService
+ *
+ * @author zyh
+ * @date 2020/5/27
+ */
 @Service
 public class StuService {
 

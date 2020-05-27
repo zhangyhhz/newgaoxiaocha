@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * UserController
  *
@@ -31,6 +34,7 @@ public class UserController {
 
     /**
      * 注册
+     *
      * @param account
      * @param password
      * @param stuNo
@@ -84,6 +88,7 @@ public class UserController {
 
     /**
      * 注册
+     *
      * @param account
      * @param password
      * @return
@@ -114,6 +119,49 @@ public class UserController {
             result.setMsg("SUCCESS");
             result.setSuccess(true);
             result.setData(loginDetail);
+        }
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/user/search", method = RequestMethod.GET)
+    @ResponseBody
+    public String search(@RequestParam(required = false, value = "userName") String userName,
+                         @RequestParam(required = false, value = "stuNo") String stuNo) {
+
+        Result result = new Result();
+        if (userName == null && stuNo == null) {
+            result.setMsg("输入条件为空!");
+            return JSONObject.toJSONString(result);
+        }
+
+        if (userName!=null){
+            List<User> users = userService.searchByAccount(userName);
+            if (users.size()>0){
+                ArrayList<LoginDetail> loginDetailList = new ArrayList<>();
+                for (User user : users) {
+                    Stu info = stuService.getInfo(user.getUserStuNo());
+                    LoginDetail loginDetail = new LoginDetail();
+                    loginDetail.setUser(user);
+                    loginDetail.setStu(info);
+                    loginDetailList.add(loginDetail);
+                }
+                result.setSuccess(true);
+                result.setData(loginDetailList);
+            }else {
+                result.setMsg("未找到用户");
+            }
+        }else {
+            User user = userService.searchByStuNo(stuNo);
+            if (user!=null){
+                LoginDetail loginDetail = new LoginDetail();
+                Stu info = stuService.getInfo(user.getUserStuNo());
+                loginDetail.setStu(info);
+                loginDetail.setUser(user);
+                result.setSuccess(true);
+                result.setData(loginDetail);
+            }else {
+                result.setMsg("未找到用户");
+            }
         }
         return JSONObject.toJSONString(result);
     }
