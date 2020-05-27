@@ -7,6 +7,7 @@ import com.gaoxiaocha.pojo.Stu;
 import com.gaoxiaocha.pojo.User;
 import com.gaoxiaocha.service.StuService;
 import com.gaoxiaocha.service.UserService;
+import com.gaoxiaocha.util.CheckStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -125,17 +126,19 @@ public class UserController {
 
     @RequestMapping(value = "/user/search", method = RequestMethod.GET)
     @ResponseBody
-    public String search(@RequestParam(required = false, value = "userName") String userName,
-                         @RequestParam(required = false, value = "stuNo") String stuNo) {
+    public String search(@RequestParam(required = false, value = "condition") String condition) {
 
         Result result = new Result();
-        if (userName == null && stuNo == null) {
+        if (condition == null) {
             result.setMsg("输入条件为空!");
             return JSONObject.toJSONString(result);
         }
 
-        if (userName!=null){
-            List<User> users = userService.searchByAccount(userName);
+        boolean b = CheckStr.checkStr(condition);
+
+        if (!b){
+            // 用户名
+            List<User> users = userService.searchByAccount(condition);
             if (users.size()>0){
                 ArrayList<LoginDetail> loginDetailList = new ArrayList<>();
                 for (User user : users) {
@@ -151,7 +154,8 @@ public class UserController {
                 result.setMsg("未找到用户");
             }
         }else {
-            User user = userService.searchByStuNo(stuNo);
+            // 学号
+            User user = userService.searchByStuNo(condition);
             if (user!=null){
                 LoginDetail loginDetail = new LoginDetail();
                 Stu info = stuService.getInfo(user.getUserStuNo());
