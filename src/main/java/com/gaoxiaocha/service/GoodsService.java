@@ -18,7 +18,7 @@ public class GoodsService {
         return goodsMapper.delete(goods);
     }
     public boolean xiugaikucun(Goods goods){
-        return goodsMapper.updateGnormsById(goods);
+        return goodsMapper.updateGstockById(goods);
     }
     public boolean xiugaijiage(Goods goods){
         return goodsMapper.updateGpriceById(goods);
