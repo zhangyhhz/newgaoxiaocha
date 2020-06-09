@@ -17,7 +17,7 @@ public interface GoodsMapper extends BaseMapper<GoodsMapper> {
 
     @Update("UPDATE goods SET gprice=#{gprice} where gid=#{gid}")
     boolean updateGpriceById(Goods goods);
-    @Update("UPDATE goods SET gstock=#{gstock}-n where gid=#{gid}")
+    @Update("UPDATE goods SET gstock=gstock-1 where gid=#{gid}")
     boolean updateGstockById(Goods goods);
 
     @Select("SELECT * FROM goods where gid=#{gid}")
