@@ -15,71 +15,72 @@ import javax.annotation.Resource;
 public class GoodsController {
     @Resource
     private GoodsService goodsService;
+
     @RequestMapping(value = "/goods/insert", method = RequestMethod.POST)
     @ResponseBody
-    public String insert(String gname,Double gprice,String gdescription,Integer gstock,String gtype,String gparameter,String gnorms,String gintroduction,String gpicture){
-        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,gtype,gparameter,gnorms,gintroduction,gpicture);
+    public String insert(String gname, Double gprice, String gdescription, Integer gstock, String gtype, String gparameter, String gnorms, String gintroduction, String gpicture) {
+        Goods goods = new Goods(null, gname, gprice, gdescription, gstock, gtype, gparameter, gnorms, gintroduction, gpicture);
         Result result = new Result();
-        if(goodsService.charu(goods)){
+        if (goodsService.charu(goods)) {
             result.setMsg("插入商品成功！");
             result.setSuccess(true);
-        }
-        else{
+        } else {
             result.setMsg("插入商品失败！");
             result.setSuccess(false);
         }
         return JSONObject.toJSONString(result);
-        }
+    }
+
     @RequestMapping(value = "/goods/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(Integer gid){
+    public String delete(Integer gid) {
         Goods goods = new Goods();
         goods.setGid(gid);
         Result result = new Result();
-        if(goodsService.shanchu(goods)){
+        if (goodsService.shanchu(goods)) {
             result.setMsg("删除商品成功！");
             result.setSuccess(true);
-        }
-        else{
+        } else {
             result.setMsg("删除商品失败！");
             result.setSuccess(false);
         }
         return JSONObject.toJSONString(result);
     }
+
     @RequestMapping(value = "/goods/updatePrice", method = RequestMethod.POST)
     @ResponseBody
-    public String updatePrice(Integer gid,Double gprice){
+    public String updatePrice(Integer gid, Double gprice) {
         Goods goods = new Goods();
         goods.setGid(gid);
         goods.setGprice(gprice);
         Result result = new Result();
-        if(goodsService.xiugaijiage(goods)){
+        if (goodsService.xiugaijiage(goods)) {
             result.setMsg("更新商品价格成功！");
             result.setSuccess(true);
-        }
-        else{
+        } else {
             result.setMsg("更新商品价格失败！");
             result.setSuccess(false);
         }
         return JSONObject.toJSONString(result);
     }
+
     @RequestMapping(value = "/goods/updateStock", method = RequestMethod.POST)
     @ResponseBody
-    public String updateStock(Integer gid,Integer gstock){
+    public String updateStock(Integer gid, Integer gstock) {
         Goods goods = new Goods();
         goods.setGid(gid);
         goods.setGstock(gstock);
         Result result = new Result();
-        if(goodsService.xiugaikucun(goods)){
+        if (goodsService.xiugaikucun(goods)) {
             result.setMsg("更新商品库存成功！");
             result.setSuccess(true);
-        }
-        else{
+        } else {
             result.setMsg("更新商品库存失败！");
             result.setSuccess(false);
         }
         return JSONObject.toJSONString(result);
     }
+
     @RequestMapping(value = "/goods/select", method = RequestMethod.POST)
     @ResponseBody
     public String select(Integer gid) {
@@ -87,11 +88,11 @@ public class GoodsController {
         goods.setGid(gid);
         Result<Goods> result = new Result();
         goods = goodsService.chazhao(goods);
-            result.setMsg("查询成功！");
-            result.setData(goods);
-            result.setSuccess(true);
+        result.setMsg("查询成功！");
+        result.setData(goods);
+        result.setSuccess(true);
 
         return JSONObject.toJSONString(result);
     }
-    }
+}
 

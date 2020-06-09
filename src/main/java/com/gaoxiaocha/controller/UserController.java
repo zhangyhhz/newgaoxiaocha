@@ -27,11 +27,14 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private StuService stuService;
+    private final StuService stuService;
+
+    public UserController(UserService userService, StuService stuService) {
+        this.userService = userService;
+        this.stuService = stuService;
+    }
 
     /**
      * 注册
