@@ -48,9 +48,10 @@ public class GoodsController {
     }
     @RequestMapping(value = "/goods/updatePrice", method = RequestMethod.POST)
     @ResponseBody
-    public String updatePrice(Integer gid){
+    public String updatePrice(Integer gid,Double gprice){
         Goods goods = new Goods();
         goods.setGid(gid);
+        goods.setGprice(gprice);
         Result result = new Result();
         if(goodsService.xiugaijiage(goods)){
             result.setMsg("更新商品价格成功！");
@@ -64,9 +65,10 @@ public class GoodsController {
     }
     @RequestMapping(value = "/goods/updateStock", method = RequestMethod.POST)
     @ResponseBody
-    public String updateStock(Integer gid){
+    public String updateStock(Integer gid,Integer gstock){
         Goods goods = new Goods();
         goods.setGid(gid);
+        goods.setGstock(gstock);
         Result result = new Result();
         if(goodsService.xiugaikucun(goods)){
             result.setMsg("更新商品库存成功！");
