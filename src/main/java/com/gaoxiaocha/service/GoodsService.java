@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class GoodsService {
@@ -25,6 +26,9 @@ public class GoodsService {
     }
     public Goods chazhao(Goods goods) {
         return goodsMapper.select(goods);
+    }
+    public List<Goods> chazhaosuoyou(){
+        return goodsMapper.selectAll();
     }
 }
 
