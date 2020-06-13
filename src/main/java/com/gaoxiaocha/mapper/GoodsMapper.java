@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.gaoxiaocha.pojo.Goods;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 public interface GoodsMapper extends BaseMapper<GoodsMapper> {
     @Insert("insert into " +
             " goods(gname,gprice,gdescription,gstock,gtype,gparameter,gnorms,gintroduction,gpicture) " +
@@ -22,5 +24,7 @@ public interface GoodsMapper extends BaseMapper<GoodsMapper> {
 
     @Select("SELECT * FROM goods where gid=#{gid}")
     Goods select(Goods goods);
+    @Select("select * from goods")
+    List<Goods> selectAll();
 }
 
