@@ -3,8 +3,10 @@ package com.gaoxiaocha.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.gaoxiaocha.dto.LoginDetail;
 import com.gaoxiaocha.dto.Result;
+import com.gaoxiaocha.pojo.ImToken;
 import com.gaoxiaocha.pojo.Stu;
 import com.gaoxiaocha.pojo.User;
+import com.gaoxiaocha.service.RongCloudService;
 import com.gaoxiaocha.service.StuService;
 import com.gaoxiaocha.service.UserService;
 import com.gaoxiaocha.util.CheckStr;
@@ -31,9 +33,12 @@ public class UserController {
 
     private final StuService stuService;
 
-    public UserController(UserService userService, StuService stuService) {
+    private final RongCloudService cloudService;
+
+    public UserController(UserService userService, StuService stuService, RongCloudService cloudService) {
         this.userService = userService;
         this.stuService = stuService;
+        this.cloudService = cloudService;
     }
 
     /**
@@ -48,7 +53,7 @@ public class UserController {
      */
     @RequestMapping(value = "/user/signup", method = RequestMethod.POST)
     @ResponseBody
-    public String signup(@RequestParam("id") String account,
+    public String signUp(@RequestParam("id") String account,
                          @RequestParam("password") String password,
                          @RequestParam("stuNo") Integer stuNo,
                          @RequestParam("userName") String userName,
@@ -78,9 +83,11 @@ public class UserController {
         Boolean isSuccess = userService.signUp(user);
         if (isSuccess) {
             Stu stu = stuService.stuInfo(stuNo);
+            ImToken register = cloudService.register(account, userName, userAvl);
             LoginDetail loginDetail = new LoginDetail();
             loginDetail.setStu(stu);
             loginDetail.setUser(user);
+            loginDetail.setToken(register);
             result.setData(loginDetail);
             result.setMsg("SUCCESS");
             result.setSuccess(true);
@@ -91,7 +98,7 @@ public class UserController {
     }
 
     /**
-     * 注册
+     * 登录
      *
      * @param account
      * @param password
@@ -117,9 +124,11 @@ public class UserController {
             result.setMsg("登陆失败，用户名或密码错误");
         } else {
             Stu stu = stuService.getInfo(user.getUserStuNo());
+            ImToken token = cloudService.getToken(account);
             LoginDetail loginDetail = new LoginDetail();
             loginDetail.setStu(stu);
             loginDetail.setUser(user);
+            loginDetail.setToken(token);
             result.setMsg("SUCCESS");
             result.setSuccess(true);
             result.setData(loginDetail);
@@ -169,6 +178,26 @@ public class UserController {
             }else {
                 result.setMsg("未找到用户");
             }
+        }
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/user/getImToken", method = RequestMethod.GET)
+    @ResponseBody
+    public String getImToken(@RequestParam("id") String account){
+        Result result = new Result();
+        if (account==null){
+            result.setMsg("用户账号为空");
+            return JSONObject.toJSONString(result);
+        }
+
+        ImToken token = cloudService.getToken(account);
+        if (token!=null){
+            result.setSuccess(true);
+            result.setData(token);
+            result.setMsg("请求成功");
+        }else {
+            result.setMsg("Token不存在");
         }
         return JSONObject.toJSONString(result);
     }

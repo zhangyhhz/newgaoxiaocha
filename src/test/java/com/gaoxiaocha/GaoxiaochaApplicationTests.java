@@ -10,7 +10,13 @@ import com.gaoxiaocha.mapper.DynamicsMapper;
 import com.gaoxiaocha.mapper.UserMapper;
 import com.gaoxiaocha.pojo.Classes;
 import com.gaoxiaocha.pojo.Dynamics;
+import com.gaoxiaocha.pojo.ImToken;
 import com.gaoxiaocha.pojo.User;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,7 @@ import javax.annotation.Resource;
 import java.sql.Wrapper;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class GaoxiaochaApplicationTests {
@@ -91,5 +98,38 @@ class GaoxiaochaApplicationTests {
         int insert = dynamicsMapper.insert(dynamics);
         Integer id = dynamics.getId();
         System.out.println(id);
+    }
+
+    @Test
+    public void register() {
+        OkHttpClient client = new OkHttpClient();
+        String appSecret = "HNQljAwFNI";
+        String url = "https://api-cn.ronghub.com/user/getToken.json";
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String randomNum = String.valueOf((Math.random() * 9 + 1) * Math.pow(10, 17)) ;
+        String signature = DigestUtils.sha1Hex(appSecret + randomNum + timestamp).toString();
+
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("userId","h254234211");
+        builder.add("name","zyh");
+        builder.add("portraitUri","null");
+        FormBody body = builder.build();
+        Request request = new Request.Builder().url(url).header("App-Key","cpj2xarlchkkn")
+                .header("Nonce",randomNum)
+                .header("Timestamp",timestamp)
+                .header("Signature",signature).post(body).build();
+        try (Response response = client.newCall(request).execute()){
+            String responseBody = response.body().string();
+            Map maps = JSON.parseObject(responseBody);
+            String token = String.valueOf(maps.get("token")) ;
+            String userId = String.valueOf(maps.get("userId"));
+            ImToken imToken = new ImToken();
+            imToken.setToken(token);
+            imToken.setUserAccount(userId);
+//            tokenMapper.insert(imToken);
+            System.out.println(imToken.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

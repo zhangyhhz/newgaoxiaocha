@@ -1,5 +1,6 @@
 package com.gaoxiaocha.dto;
 
+import com.gaoxiaocha.pojo.ImToken;
 import com.gaoxiaocha.pojo.Stu;
 import com.gaoxiaocha.pojo.User;
 import lombok.Data;
@@ -14,4 +15,5 @@ import lombok.Data;
 public class LoginDetail {
     private User user;
     private Stu  stu;
+    private ImToken token;
 }
