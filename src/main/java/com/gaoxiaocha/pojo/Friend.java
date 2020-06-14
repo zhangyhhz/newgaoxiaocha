@@ -17,9 +17,9 @@ public class Friend {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
 
-    Integer userId;
+    String userId;
 
-    Integer friendId;
+    String friendId;
 
     Long gmtCreate;
 

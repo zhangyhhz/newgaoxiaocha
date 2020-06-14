@@ -34,8 +34,8 @@ public class FriendController {
      */
     @RequestMapping(value = "/friend/addFriend", method = RequestMethod.POST)
     @ResponseBody
-    public String addFriend(@RequestParam("userId")Integer userId,
-                            @RequestParam("friendId")Integer friendId){
+    public String addFriend(@RequestParam("userId")String userId,
+                            @RequestParam("friendId")String friendId){
         Result result = new Result();
         if (userId==null||friendId==null){
             result.setMsg("添加失败");
@@ -61,8 +61,8 @@ public class FriendController {
      */
     @RequestMapping(value = "/friend/deleteFriend", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(@RequestParam("userId")Integer userId,
-                            @RequestParam("friendId")Integer friendId){
+    public String delete(@RequestParam("userId")String userId,
+                            @RequestParam("friendId")String friendId){
         Result result = new Result();
         Boolean isSuccess = friendService.delete(userId, friendId);
         if (isSuccess==true){
@@ -82,7 +82,7 @@ public class FriendController {
      */
     @RequestMapping(value = "/friend/friendList", method = RequestMethod.GET)
     @ResponseBody
-    public String listAll(@RequestParam("userId")Integer userId){
+    public String listAll(@RequestParam("userId")String userId){
         Result result = new Result();
         List<User> users = friendService.listAll(userId);
         result.setSuccess(true);

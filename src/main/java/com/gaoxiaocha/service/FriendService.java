@@ -20,7 +20,7 @@ public class FriendService {
     @Resource
     private UserMapper userMapper;
 
-    public Boolean addFriend(Integer userId, Integer friendId) {
+    public Boolean addFriend(String userId, String friendId) {
         Friend friend = new Friend();
         friend.setFriendId(friendId);
         friend.setUserId(userId);
@@ -34,7 +34,7 @@ public class FriendService {
         }
     }
 
-    public Boolean delete(Integer userId, Integer friendId) {
+    public Boolean delete(String userId, String friendId) {
         QueryWrapper<Friend> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         wrapper.eq("friend_id", friendId);
@@ -46,7 +46,7 @@ public class FriendService {
         }
     }
 
-    public List<User> listAll(Integer userId) {
+    public List<User> listAll(String userId) {
         QueryWrapper<Friend> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
 
