@@ -18,8 +18,8 @@ public class GoodsController {
     private GoodsService goodsService;
     @RequestMapping(value = "/goods/insert", method = RequestMethod.POST)
     @ResponseBody
-    public String insert(String gname,Double gprice,String gdescription,Integer gstock,String gtype,String gparameter,String gnorms,String gintroduction,String gpicture){
-        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,gtype,gparameter,gnorms,gintroduction,gpicture);
+    public String insert(String gname,Double gprice,String gdescription,Integer gstock,String gpicture){
+        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,gpicture);
         Result result = new Result();
         if(goodsService.charu(goods)){
             result.setMsg("插入商品成功！");
