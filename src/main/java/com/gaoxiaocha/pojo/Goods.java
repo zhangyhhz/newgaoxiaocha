@@ -15,9 +15,5 @@ public class Goods {
     private Double gprice;
     private String gdescription;
     private Integer gstock;
-    private String gtype;
-    private String gparameter;
-    private String gnorms;
-    private String gintroduction;
     private String gpicture;
 }
