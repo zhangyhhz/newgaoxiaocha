@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface GoodsMapper extends BaseMapper<GoodsMapper> {
     @Insert("insert into " +
-            " goods(gname,gprice,gdescription,gstock,gtype,gparameter,gnorms,gintroduction,gpicture) " +
-            " VALUES(#{gname},#{gprice},#{gdescription},#{gstock},#{gtype},#{gparameter},#{gnorms},#{gintroduction},#{gpicture}) ")
+            " goods(gname,gprice,gdescription,gstock,gpicture) " +
+            " VALUES(#{gname},#{gprice},#{gdescription},#{gstock},#{gpicture}) ")
     boolean insert(Goods goods);
 
     @Delete("delete FROM goods WHERE gid=#{gid}")
