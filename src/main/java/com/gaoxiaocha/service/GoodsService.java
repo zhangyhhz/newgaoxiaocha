@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.gaoxiaocha.service;
 
 import com.gaoxiaocha.mapper.GoodsMapper;
@@ -32,3 +33,39 @@ public class GoodsService {
     }
 }
 
+=======
+package com.gaoxiaocha.service;
+
+import com.gaoxiaocha.mapper.GoodsMapper;
+import com.gaoxiaocha.pojo.Goods;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Service
+public class GoodsService {
+    @Resource
+    private GoodsMapper goodsMapper;
+    public boolean charu(Goods goods){
+        return goodsMapper.insert(goods);
+    }
+    public boolean shanchu(Goods goods){
+        return goodsMapper.delete(goods);
+    }
+    public boolean xiugaikucun(Goods goods){
+        return goodsMapper.updateGstockById(goods);
+    }
+    public boolean xiugaijiage(Goods goods){
+        return goodsMapper.updateGpriceById(goods);
+    }
+    public Goods chazhao(Goods goods) {
+        return goodsMapper.select(goods);
+    }
+    public List<Goods> chazhaosuoyou(){
+        return goodsMapper.selectAll();
+    }
+}
+
+>>>>>>> 14611d12e04a5af814edb4e5e2ef9142b825dc57

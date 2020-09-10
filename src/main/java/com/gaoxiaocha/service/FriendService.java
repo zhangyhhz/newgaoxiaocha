@@ -55,7 +55,11 @@ public class FriendService {
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         for (Friend friend : friends) {
+<<<<<<< HEAD
             queryWrapper.eq("user_id",Integer.parseInt(friend.getFriendId()));
+=======
+            queryWrapper.eq("id",Integer.parseInt(friend.getFriendId()));
+>>>>>>> 14611d12e04a5af814edb4e5e2ef9142b825dc57
             User user = userMapper.selectOne(queryWrapper);
             users.add(user);
         }
