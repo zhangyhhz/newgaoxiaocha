@@ -22,5 +22,4 @@ public class Friend {
     String friendId;
 
     Long gmtCreate;
-
 }

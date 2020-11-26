@@ -1,8 +1,12 @@
 package com.gaoxiaocha.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gaoxiaocha.mapper.CommentsMapper;
 import com.gaoxiaocha.mapper.DynamicsMapper;
+import com.gaoxiaocha.pojo.Classes;
 import com.gaoxiaocha.pojo.Comments;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +56,30 @@ public class CommentsService {
         }else {
             return false;
         }
+    }
+
+    public int insert(Comments comments){
+        return commentsMapper.insert(comments);
+    }
+    public List<Comments> select(){
+        return commentsMapper.selectList(null);
+    }
+    public int update(Comments comments){
+        return commentsMapper.updateById(comments);
+    }
+    public int delete(Comments comments){
+        return commentsMapper.deleteById(comments.getId());
+    }
+
+    public List<Comments> queryForPage(int currentPage,int numPerPage){
+        IPage<Comments> commentsIPage = new Page<>(currentPage,numPerPage);
+        commentsIPage = commentsMapper.selectPage(commentsIPage,null);
+        List<Comments> list = commentsIPage.getRecords();
+        return  list;
+    }
+
+    public int count(){
+        QueryWrapper<Comments> queryWrapper=new QueryWrapper();
+        return commentsMapper.selectCount(queryWrapper);
     }
 }

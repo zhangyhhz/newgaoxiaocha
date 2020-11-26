@@ -3,19 +3,14 @@ package com.gaoxiaocha.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.gaoxiaocha.dto.LoginDetail;
 import com.gaoxiaocha.dto.Result;
-import com.gaoxiaocha.pojo.ImToken;
-import com.gaoxiaocha.pojo.Stu;
-import com.gaoxiaocha.pojo.User;
+import com.gaoxiaocha.pojo.*;
 import com.gaoxiaocha.service.RongCloudService;
 import com.gaoxiaocha.service.StuService;
 import com.gaoxiaocha.service.UserService;
 import com.gaoxiaocha.util.CheckStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,5 +195,108 @@ public class UserController {
             result.setMsg("Token不存在");
         }
         return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/user/charu", method = RequestMethod.POST)
+    @ResponseBody
+    public String charu(@RequestBody User user) {
+        Result result = new Result();
+        if (userService.insert(user) == 1) {
+            result.setMsg("插入成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        } else {
+            result.setMsg("插入失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+
+    }
+
+    @RequestMapping(value = "/user/chazhao", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String chazhao() {
+        List<User> list = userService.select();
+        Result<List<List<String>>> result =new Result();
+        List<List<String>> lists = new ArrayList<>();
+        for (User item:list){
+            List<String> l = new ArrayList<>();
+            l.add(String.valueOf(item.getUserId()));
+            l.add(String.valueOf(item.getUserAccount()));
+            l.add(String.valueOf(item.getUserPwd()));
+            l.add(String.valueOf(item.getUserName()));
+            l.add(String.valueOf(item.getUserStuNo()));
+            l.add(String.valueOf(item.getUserAvl()));
+            lists.add(l);
+        }
+        result.setData(lists);
+        result.setMsg("查找成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/user/gengxin", method = RequestMethod.POST)
+    @ResponseBody
+    public String gengxin(@RequestBody User user) {
+        Result result = new Result();
+        if (userService.update(user) == 1) {
+            result.setMsg("更新成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        } else {
+            result.setMsg("更新失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+
+    }
+
+    @RequestMapping(value = "/user/shanchu", method = RequestMethod.POST)
+    @ResponseBody
+    public String shanchu(@RequestBody User user) {
+        Result result = new Result();
+        if (userService.delete(user) == 1) {
+            result.setMsg("删除成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        } else {
+            result.setMsg("删除失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+    }
+
+    @RequestMapping(value = "/user/fenyechazhao",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String fenyechazhao(@RequestParam("currentPage") int currentPage,@RequestParam("numPerPage") int numperPage){
+        Result<List<List<String>>> result =new Result();
+        List<User> list = userService.queryForPage(currentPage,numperPage);
+        List<List<String>> lists = new ArrayList<>();
+        for (User item:list){
+            List<String> l = new ArrayList<>();
+            l.add(String.valueOf(item.getUserId()));
+            l.add(String.valueOf(item.getUserAccount()));
+            l.add(String.valueOf(item.getUserPwd()));
+            l.add(String.valueOf(item.getUserName()));
+            l.add(String.valueOf(item.getUserStuNo()));
+            l.add(String.valueOf(item.getUserAvl()));
+            lists.add(l);
+        }
+        result.setData(lists);
+        result.setMsg("查找成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/user/count",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String count(){
+        Result result =new Result();
+        int count = userService.count();
+        result.setData(count);
+        result.setMsg("删除成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+
     }
 }

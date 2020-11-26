@@ -3,15 +3,15 @@ package com.gaoxiaocha.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.gaoxiaocha.dto.DynamicWithComments;
 import com.gaoxiaocha.dto.Result;
+import com.gaoxiaocha.pojo.Classes;
+import com.gaoxiaocha.pojo.Comments;
 import com.gaoxiaocha.pojo.Dynamics;
 import com.gaoxiaocha.service.DynamicsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +43,7 @@ public class DynamicsController {
                           @RequestParam("img")String img){
         Result result = new Result();
         if (userId==null){
+
             result.setMsg("用户未登录");
             return JSONObject.toJSONString(result);
         }
@@ -172,5 +173,113 @@ public class DynamicsController {
             result.setMsg("删除失败");
         }
         return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/dynamics/charu",method = RequestMethod.POST)
+    @ResponseBody
+    public String charu(@RequestBody Dynamics dynamics){
+        Result result =new Result();
+        if(dynamicsService.insert(dynamics)==1) {
+            result.setMsg("插入成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        }else {
+            result.setMsg("插入失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+
+    }
+
+    @RequestMapping(value = "/dynamics/chazhao",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String chazhao(){
+        Result<List<List<String>>> result =new Result();
+        List<Dynamics> list = dynamicsService.select();
+        List<List<String>> lists = new ArrayList<>();
+        for (Dynamics item:list){
+            List<String> l = new ArrayList<>();
+            l.add(String.valueOf(item.getId()));
+            l.add(String.valueOf(item.getUserId()));
+            l.add(String.valueOf(item.getUserName()));
+            l.add(String.valueOf(item.getContent()));
+            l.add(String.valueOf(item.getImg()));
+            l.add(String.valueOf(item.getGmtCreate()));
+            l.add(String.valueOf(item.getCommentCount()));
+            l.add(String.valueOf(item.getLikeCount()));
+            lists.add(l);
+        }
+        result.setData(lists);
+        result.setMsg("查找成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/dynamics/gengxin",method = RequestMethod.POST)
+    @ResponseBody
+    public String gengxin(@RequestBody Dynamics dynamics){
+        Result result =new Result();
+        if(dynamicsService.update(dynamics)==1) {
+            result.setMsg("更新成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        }else {
+            result.setMsg("更新失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+
+    }
+
+    @RequestMapping(value = "/dynamics/shanchu",method = RequestMethod.POST)
+    @ResponseBody
+    public String shanchu(@RequestBody Dynamics dynamics){
+        Result result =new Result();
+        if(dynamicsService.delete(dynamics)==1) {
+            result.setMsg("删除成功！");
+            result.setSuccess(true);
+            return JSONObject.toJSONString(result);
+        }else {
+            result.setMsg("删除失败");
+            result.setSuccess(false);
+            return JSONObject.toJSONString(result);
+        }
+
+    }
+
+    @RequestMapping(value = "/dynamics/fenyechazhao",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String fenyechazhao(@RequestParam("currentPage") int currentPage,@RequestParam("numPerPage") int numperPage){
+        Result<List<List<String>>> result =new Result();
+        List<Dynamics> list = dynamicsService.queryForPage(currentPage,numperPage);
+        List<List<String>> lists = new ArrayList<>();
+        for (Dynamics item:list){
+            List<String> l = new ArrayList<>();
+            l.add(String.valueOf(item.getId()));
+            l.add(String.valueOf(item.getUserId()));
+            l.add(String.valueOf(item.getUserName()));
+            l.add(String.valueOf(item.getContent()));
+            l.add(String.valueOf(item.getImg()));
+            l.add(String.valueOf(item.getGmtCreate()));
+            l.add(String.valueOf(item.getCommentCount()));
+            l.add(String.valueOf(item.getLikeCount()));
+            lists.add(l);
+        }
+        result.setData(lists);
+        result.setMsg("查找成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+    }
+
+    @RequestMapping(value = "/dynamics/count",method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public String count(){
+        Result result =new Result();
+        int count = dynamicsService.count();
+        result.setData(count);
+        result.setMsg("删除成功！");
+        result.setSuccess(true);
+        return JSONObject.toJSONString(result);
+
     }
 }

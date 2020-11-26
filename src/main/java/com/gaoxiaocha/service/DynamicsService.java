@@ -2,11 +2,14 @@ package com.gaoxiaocha.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gaoxiaocha.dto.DynamicWithComments;
 import com.gaoxiaocha.mapper.CommentsMapper;
 import com.gaoxiaocha.mapper.DynamicsMapper;
+import com.gaoxiaocha.pojo.Classes;
 import com.gaoxiaocha.pojo.Comments;
 import com.gaoxiaocha.pojo.Dynamics;
 import org.springframework.stereotype.Service;
@@ -137,5 +140,30 @@ public class DynamicsService {
         dynamicWithComments.setDynamics(dynamics);
         dynamicWithComments.setComments(comments);
         return dynamicWithComments;
+    }
+
+    public int insert(Dynamics dynamics){
+        return dynamicsMapper.insert(dynamics);
+    }
+    public List<Dynamics> select(){
+        return dynamicsMapper.selectList(null);
+    }
+    public int update(Dynamics dynamics){
+        return dynamicsMapper.updateById(dynamics);
+    }
+    public int delete(Dynamics dynamics){
+        return dynamicsMapper.deleteById(dynamics.getId());
+    }
+
+    public List<Dynamics> queryForPage(int currentPage, int numPerPage){
+        IPage<Dynamics> dynamisIPage = new Page<>(currentPage,numPerPage);
+        dynamisIPage = dynamicsMapper.selectPage(dynamisIPage,null);
+        List<Dynamics> list = dynamisIPage.getRecords();
+        return  list;
+    }
+
+    public int count(){
+        QueryWrapper<Dynamics> queryWrapper=new QueryWrapper();
+        return dynamicsMapper.selectCount(queryWrapper);
     }
 }

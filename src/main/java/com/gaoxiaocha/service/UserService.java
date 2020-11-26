@@ -1,7 +1,12 @@
 package com.gaoxiaocha.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gaoxiaocha.mapper.UserMapper;
+import com.gaoxiaocha.pojo.Classes;
+import com.gaoxiaocha.pojo.Friend;
 import com.gaoxiaocha.pojo.User;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +57,33 @@ public class UserService {
         queryWrapper.eq("user_stu_no", stuNo);
         User user = userMapper.selectOne(queryWrapper);
         return user;
+    }
+
+    public int insert(User user){
+        System.out.println(user);
+        return userMapper.insert(user);
+    }
+    public List<User> select(){
+        return userMapper.selectList(null);
+    }
+    public int update(User user){
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("user_id",user.getUserId());
+        return userMapper.update(user,updateWrapper);
+    }
+    public int delete(User user){
+        return userMapper.deleteById(user.getUserId());
+    }
+
+    public List<User> queryForPage(int currentPage, int numPerPage){
+        IPage<User> userIPage = new Page<>(currentPage,numPerPage);
+        userIPage = userMapper.selectPage(userIPage,null);
+        List<User> list = userIPage.getRecords();
+        return  list;
+    }
+
+    public int count(){
+        QueryWrapper<User> queryWrapper=new QueryWrapper();
+        return userMapper.selectCount(queryWrapper);
     }
 }

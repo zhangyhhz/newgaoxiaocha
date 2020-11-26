@@ -13,4 +13,5 @@ public class Result<T> {
     private String  msg;
     private boolean isSuccess = false;
     private T       data  = null;
+
 }

@@ -2,6 +2,7 @@ package com.gaoxiaocha.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gaoxiaocha.pojo.Classes;
+import org.apache.ibatis.annotations.Insert;
 
 /**
  * ClassMapper

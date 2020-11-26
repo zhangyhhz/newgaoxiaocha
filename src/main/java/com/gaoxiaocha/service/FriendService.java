@@ -1,8 +1,11 @@
 package com.gaoxiaocha.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gaoxiaocha.mapper.FriendMapper;
 import com.gaoxiaocha.mapper.UserMapper;
+import com.gaoxiaocha.pojo.Classes;
 import com.gaoxiaocha.pojo.Friend;
 import com.gaoxiaocha.pojo.User;
 import org.springframework.stereotype.Service;
@@ -55,14 +58,35 @@ public class FriendService {
 
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         for (Friend friend : friends) {
-<<<<<<< HEAD
             queryWrapper.eq("user_id",Integer.parseInt(friend.getFriendId()));
-=======
-            queryWrapper.eq("id",Integer.parseInt(friend.getFriendId()));
->>>>>>> 14611d12e04a5af814edb4e5e2ef9142b825dc57
             User user = userMapper.selectOne(queryWrapper);
             users.add(user);
         }
         return users;
+    }
+
+    public int insert(Friend friend){
+        return friendMapper.insert(friend);
+    }
+    public List<Friend> select(){
+        return friendMapper.selectList(null);
+    }
+    public int update(Friend friend){
+        return friendMapper.updateById(friend);
+    }
+    public int delete(Friend friend){
+        return friendMapper.deleteById(friend.getId());
+    }
+
+    public List<Friend> queryForPage(int currentPage, int numPerPage){
+        IPage<Friend> friendIPage = new Page<>(currentPage,numPerPage);
+        friendIPage = friendMapper.selectPage(friendIPage,null);
+        List<Friend> list = friendIPage.getRecords();
+        return  list;
+    }
+
+    public int count(){
+        QueryWrapper<Friend> queryWrapper=new QueryWrapper();
+        return friendMapper.selectCount(queryWrapper);
     }
 }

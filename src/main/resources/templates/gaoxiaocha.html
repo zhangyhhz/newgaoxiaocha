@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>校园生活后台数据一览</title>
+    <style>
+        #d1{
+            margin-top: 20px;
+            padding: 10px;
+        }
+        .d2{
+            width: 70%;
+            margin-top: 25px;
+            margin-left: 15%;
+            margin-right: 15%;
+        }
+        .btn{
+            margin-left: 10px;
+        }
+        .d3{
+            margin-left: 20%;
+            margin-right: 20%;
+            width: 60%;
+        }
+        #t2{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="d1">
+    <table border="1" id="t1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                表名
+            </td>
+        </tr>
+    </table>
+    </div>
+    <hr/>
+    <p align="center" id="p1"></p>
+    <div class="d2" align="center">
+    <table border="1" id="t2" cellspacing="0">
+    </table>
+    </div>
+    <br>
+
+    <div class="d3" align="center">
+    <div class="d4">
+        <button class="btn" id="b1">增加</button>
+        <button class="btn" id="b2">删除</button>
+        <button class="btn" id="b3">修改</button>
+        <button class="btn" id="b8">刷新</button>
+    </div>
+    <br>
+
+    <div class="d5">
+        <button class="btn" id="b4">首页</button>
+        <button class="btn" id="b5">上一页</button>
+        <button class="btn" id="b6">下一页</button>
+        <button class="btn" id="b7">末页</button>
+    </div>
+
+    </div>
+
+    <div id="d1" align="center">
+    </div>
+    <div id = "d6" align="center">
+    </div>
+</body>
+<script>
+    let totalPage;
+    let numPerPage = 10;
+    let currentPage = 1;
+    let tableName;
+    let p;
+    let length;
+    let t3;
+    let d = document.getElementById("d1");
+    let d1 = document.getElementById("d6");
+
+    function loadField(url){
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        // ...our code here...
+                        let doc = xmlhttp.responseText;
+                        let response = JSON.parse(doc);
+                        let t2 = document.getElementById("t2");
+                        t2.innerHTML = "";
+                        let child = document.createElement("tr");
+                        t2.appendChild(child);
+
+                        for (let i = 0;i<response.data.length;i++){
+                            var td = document.createElement("td");
+                            child.appendChild(td);
+                            td.innerText = response.data[i]  ;
+                        }
+
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send();
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+
+    function loadAdd(url){
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        // ...our code here...
+                        let doc = xmlhttp.responseText;
+                        let response = JSON.parse(doc);
+                        d.innerHTML="";
+                        t3 = document.createElement("table");
+                        t3.border="1";
+                        t3.cellSpacing="0";
+                        let tbody = document.createElement("tbody");
+                        let tr1 = document.createElement("tr");
+                        d.appendChild(t3);
+                        t3.appendChild(tbody);
+                        tbody.appendChild(tr1);
+                        length = response.data.length;
+                        for (let i = 0;i<response.data.length;i++){
+                            var td = document.createElement("td");
+                            tr1.appendChild(td);
+                            td.innerText = response.data[i]  ;
+                        }
+
+                        let tr2 = document.createElement("tr");
+                        tbody.appendChild(tr2);
+                        for (let i = 0;i<response.data.length;i++){
+                            var td = document.createElement("td");
+                            var input = document.createElement("input");
+                            input.type = "text";
+                            td.appendChild(input);
+                            tr2.appendChild(td);
+                        }
+
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send();
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+    loadXMLDoc("http://localhost:8080/database/view");
+
+    function count(url){
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        // ...our code here...
+                        let doc = xmlhttp.responseText;
+                        let response = JSON.parse(doc);
+
+                        if(parseInt(response.data)%numPerPage==0)
+                            totalPage = parseInt(response.data)/numPerPage;
+                        else
+                            totalPage = (parseInt(response.data)-response.data%numPerPage)/numPerPage+1;
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send();
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+    function loadDel(){
+        d.innerHTML="";
+        t3 = document.createElement("table");
+        var tbody = document.createElement("tbody");
+        var tr1 = document.createElement("tr");
+        d.appendChild(t3);
+        t3.appendChild(tbody);
+        tbody.appendChild(tr1);
+        var td = document.createElement("td");
+        tr1.appendChild(td);
+        td.innerText = "请输入您想删除的记录id"  ;
+        let tr2 = document.createElement("tr");
+        tbody.appendChild(tr2);
+        var td = document.createElement("td");
+        var input = document.createElement("input");
+        input.type = "text";
+        td.appendChild(input);
+        tr2.appendChild(td);
+    }
+
+    function loadXMLDoc(url)
+    {
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        let doc = xmlhttp.responseText;
+                        let response = JSON.parse(doc);
+                        if(response.success == true&&response.msg=="查表成功"){
+                            let t1 = document.getElementById("t1");
+                            for (let i=0;i<response.data.length;i++){
+                                let tr = document.createElement("tr");
+                                let td = document.createElement("td");
+                                t1.appendChild(tr);
+                                tr.appendChild(td);
+                                p = document.getElementById("p1");
+                                td.onclick = function cli(){
+                                    d.innerHTML="";
+                                    d1.innerHTML="";
+                                    p.innerText = response.data[i];
+                                    currentPage = 1;
+                                    count("http://localhost:8080/"+p.innerText+"/count");
+                                    console.log(totalPage);
+                                    loadField("http://localhost:8080/field/select?tableName=" + response.data[i]);
+                                    loadXMLDoc("http://localhost:8080/" + response.data[i] + "/fenyechazhao?currentPage=" + currentPage + "&numPerPage=" + numPerPage);
+                                };
+                                td.innerText = response.data[i];
+                            }
+                        }else {
+                            let t2 = document.getElementById("t2");
+                            //t2.innerHTML = "";
+                            //加字段
+                            for (let i=0;i<response.data.length;i++){
+                                var child = document.createElement("tr");
+                                t2.appendChild(child);
+                                for (let j = 0;j<response.data[i].length;j++){
+                                    var td = document.createElement("td");
+                                    child.appendChild(td);
+                                    td.innerText = response.data[i][j]    ;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send();
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+
+    function finish()
+    {
+        d.innerHTML = "";
+        d1.innerHTML = "";
+            loadField("http://localhost:8080/field/select?tableName=" + p.innerText);
+            loadXMLDoc("http://localhost:8080/" + p.innerText + "/fenyechazhao?currentPage=" + currentPage + "&numPerPage=" + numPerPage);
+    }
+
+    function refresh(){
+            loadField("http://localhost:8080/field/select?tableName=" + p.innerText);
+            loadXMLDoc("http://localhost:8080/" + p.innerText + "/fenyechazhao?currentPage=" + currentPage + "&numPerPage=" + numPerPage);
+    }
+
+    function insertOrAlter(url,arr,operate)
+    {
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        alert(operate+"成功！");
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("POST",url,true);
+            xmlhttp.setRequestHeader("Content-Type","application/json;charset=UTF-8");
+            var body = "";
+            for(var i = 0;i<arr.length;i++){
+                if(i!=arr.length-1)
+                    body+=arr[i]+",";
+                else
+                    body+=arr[i];
+            }
+            xmlhttp.send("{"+body+"}");
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+
+    function delete1(url,id)
+    {
+        var xmlhttp;
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {// code for all new browsers
+            xmlhttp=new XMLHttpRequest();
+        }
+        else if (window.ActiveXObject)
+        {// code for IE5 and IE6
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        if (xmlhttp!=null)
+        {
+            xmlhttp.onreadystatechange=function(){
+                if (xmlhttp.readyState==4)
+                {// 4 = "loaded"
+                    if (xmlhttp.status==200)
+                    {// 200 = OK
+                        alert("删除成功！");
+                    }
+                    else
+                    {
+                        alert("Problem retrieving XML data");
+                    }
+                }
+            };
+            xmlhttp.open("POST",url,true);
+            xmlhttp.setRequestHeader("Content-Type","application/json;charset=UTF-8");
+            xmlhttp.send("{"+id+"}");
+        }
+        else
+        {
+            alert("Your browser does not support XMLHTTP.");
+        }
+    }
+    function strParse(str){
+        var res="";
+        let strs = str.split("_");
+        for (let i=0;i<strs.length;i++){
+            if(i==0){
+                res+=strs[i];
+            }else {
+                res+=strs[i].substr(0,1).toLocaleUpperCase()+strs[i].substr(1);
+            }
+        }
+        return res;
+    }
+    var add = document.getElementById("b1");
+    var del = document.getElementById("b2");
+    var alter = document.getElementById("b3");
+    var refre = document.getElementById("b8");
+    var firstPage = document.getElementById("b4");
+    var previousPage = document.getElementById("b5");
+    var nextPage = document.getElementById("b6");
+    var lastPage = document.getElementById("b7");
+
+    firstPage.onclick = function firstPage(){
+        currentPage = 1;
+        refresh();
+    }
+
+    previousPage.onclick = function previousPage(){
+        if(currentPage==1)
+            currentPage = totalPage;
+        else
+            currentPage--;
+        refresh();
+    }
+
+    nextPage.onclick = function nextPage(){
+        if (currentPage==totalPage)
+            currentPage = 1;
+        else
+            currentPage++;
+        refresh();
+    }
+
+    lastPage.onclick = function lastPage(){
+        currentPage = totalPage;
+        refresh();
+    }
+    refre.onclick = function refre(){
+        refresh();
+    }
+    add.onclick=function add(){
+        loadAdd("http://localhost:8080/field/select?tableName="+p.innerText);
+            let submit = document.createElement("button");
+            submit.innerText = "提交";
+            d1.innerHTML="";
+            d1.appendChild(submit);
+            submit.onclick = function submit() {
+                let arr = new Array(length);
+                for(let i = 0;i<2;i++) {
+                    for(let j = 0;j<length;j++){
+                        if (i==0) {
+                            var str = t3.tBodies[0].rows[i].cells[j].innerText;
+                            var res = strParse(str);
+                            arr[j] = "\""+res+"\"";
+                        }else {
+                            arr[j] += ":\""+t3.tBodies[0].rows[i].cells[j].childNodes[0].value+"\"";
+                        }
+                    }
+                }
+                insertOrAlter("http://localhost:8080/"+p.innerText+"/charu",arr,"插入");
+                finish();
+
+            }
+    };
+
+    del.onclick =function del(){
+        loadDel();
+        d1.innerHTML="";
+        let submit = document.createElement("button");
+        submit.innerText = "提交";
+        d1.appendChild(submit);
+        submit.onclick = function submit(){
+            let id = t3.tBodies[0].rows[1].cells[0].childNodes[0].value;
+            if(p.innerText=="goods")
+                id ="\"gid\":"+("\""+id+"\"");
+            else if(p.innerText=="user")
+                id = "\"userId\":"+("\""+id+"\"");
+            else if(p.innerText=="im_token")
+                id = "\"userAccount\":"+("\""+id+"\"");
+            else
+                id = "\"id\":"+("\""+id+"\"");
+            delete1("http://localhost:8080/"+p.innerText+"/shanchu",id);
+            finish();
+        }
+    }
+
+    alter.onclick = function alter(){
+        loadAdd("http://localhost:8080/field/select?tableName="+p.innerText);
+        d1.innerHTML="";
+        let submit = document.createElement("button");
+        submit.innerText = "提交";
+        d1.appendChild(submit);
+        submit.onclick = function submit(){
+            let arr = new Array(length);
+            for(let i = 0;i<2;i++) {
+                for(let j = 0;j<length;j++){
+                    if (i==0) {
+                        var str = t3.tBodies[0].rows[i].cells[j].innerText;
+                        var res = strParse(str);
+                        arr[j] = "\""+res+"\"";
+                    }else {
+                        arr[j] += ":\""+t3.tBodies[0].rows[i].cells[j].childNodes[0].value+"\"";
+                    }
+                }
+            }
+            insertOrAlter("http://localhost:8080/"+p.innerText+"/gengxin",arr,"更新");
+            finish();
+        }
+    }
+
+</script>
+</html>
