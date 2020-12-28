@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface GoodsMapper extends BaseMapper<Goods> {
     @Insert("insert into " +
-            " goods(gname,gprice,gdescription,gstock,gpicture,guserid) " +
-            " VALUES(#{gname},#{gprice},#{gdescription},#{gstock},#{gpicture},#{guserid}) ")
+            " goods(gname,gprice,gdescription,gpicture,gstuNo,gtime) " +
+            " VALUES(#{gname},#{gprice},#{gdescription},#{gpicture},#{gstuNo},#{gtime}) ")
     int insert(Goods goods);
 
     @Delete("delete FROM goods WHERE gid=#{gid}")
@@ -19,9 +19,8 @@ public interface GoodsMapper extends BaseMapper<Goods> {
 
     @Update("UPDATE goods SET gprice=#{gprice} where gid=#{gid}")
     boolean updateGpriceById(Goods goods);
-    @Update("UPDATE goods SET gstock=gstock-1 where gid=#{gid}")
-    boolean updateGstockById(Goods goods);
-    @Update("UPDATE goods SET gname=#{gname},gprice=#{gprice},gdescription=#{gdescription},gstock=#{gstock},gpicture=#{gpicture},guserid=#{guserid} where gid=#{gid}")
+
+    @Update("UPDATE goods SET gname=#{gname},gprice=#{gprice},gdescription=#{gdescription},gpicture=#{gpicture},gstuNo=#{gstuNo} where gid=#{gid}")
     int updateById(Goods goods);
 
     @Select("SELECT * FROM goods where gid=#{gid}")

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gaoxiaocha.mapper.GoodsMapper;
-import com.gaoxiaocha.pojo.Classes;
 import com.gaoxiaocha.pojo.Goods;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +22,6 @@ public class GoodsService {
     public boolean shanchu(Goods goods){
         return goodsMapper.delete(goods);
     }
-    public boolean xiugaikucun(Goods goods){
-        return goodsMapper.updateGstockById(goods);
-    }
     public boolean xiugaijiage(Goods goods){
         return goodsMapper.updateGpriceById(goods);
     }
@@ -36,13 +32,6 @@ public class GoodsService {
     }
     public List<Goods> chazhaosuoyou(){
         return goodsMapper.selectAll();
-    }
-    public String shangchuantupian(String image) throws IOException {
-        String filename = "/media/"+ UUID.randomUUID().toString();
-        File file = new File(filename);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(image.replaceAll(" ","+").getBytes());
-        return filename;
     }
 
     public List<Goods> queryForPage(int currentPage, int numPerPage){

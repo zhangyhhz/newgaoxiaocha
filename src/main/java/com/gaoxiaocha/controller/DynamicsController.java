@@ -208,6 +208,7 @@ public class DynamicsController {
             l.add(String.valueOf(item.getGmtCreate()));
             l.add(String.valueOf(item.getCommentCount()));
             l.add(String.valueOf(item.getLikeCount()));
+            l.add(String.valueOf(item.getLocation()));
             lists.add(l);
         }
         result.setData(lists);
@@ -264,6 +265,7 @@ public class DynamicsController {
             l.add(String.valueOf(item.getGmtCreate()));
             l.add(String.valueOf(item.getCommentCount()));
             l.add(String.valueOf(item.getLikeCount()));
+            l.add(String.valueOf(item.getLocation()));
             lists.add(l);
         }
         result.setData(lists);

@@ -12,10 +12,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class GoodsController {
@@ -25,14 +22,10 @@ public class GoodsController {
     @ResponseBody
     public String insert(@RequestParam("name") String gname,
                          @RequestParam("price")Double gprice,
-                         String gdescription,
-                         @RequestParam("stock")Integer gstock,
+                         @RequestParam("description")String gdescription,
                          @RequestParam("img") MultipartFile gpicture,
-                         @RequestParam("userId")Integer guserid) throws IOException {
-
-        if(gdescription==null){
-            gdescription = "没有描述";
-        }
+                         @RequestParam("stuNo")Integer gstuNo
+                         ) throws IOException {
         String folder = "media";
         File file1 = new File(folder);
         if (!file1.exists()) {
@@ -43,9 +36,8 @@ public class GoodsController {
                 .substring(gpicture.getOriginalFilename().lastIndexOf('.'));
         File file = new File(file1.getAbsolutePath()+File.separator+filename);
         gpicture.transferTo(file);
-        //gpicture = goodsService.shangchuantupian(gpicture);
-        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,
-                file1.getAbsolutePath()+File.separator+filename,guserid);
+        Goods goods = new Goods(null,gname,gprice,gdescription,
+                file1.getAbsolutePath()+File.separator+filename,gstuNo,new Date());
         Result result = new Result();
         if(goodsService.charu(goods)==1){
             result.setMsg("插入商品成功！");
@@ -90,23 +82,7 @@ public class GoodsController {
         }
         return JSONObject.toJSONString(result);
     }
-    @RequestMapping(value = "/goods/updateStock", method = RequestMethod.POST)
-    @ResponseBody
-    public String updateStock(Integer gid,Integer gstock){
-        Goods goods = new Goods();
-        goods.setGid(gid);
-        goods.setGstock(gstock);
-        Result result = new Result();
-        if(goodsService.xiugaikucun(goods)){
-            result.setMsg("更新商品库存成功！");
-            result.setSuccess(true);
-        }
-        else{
-            result.setMsg("更新商品库存失败！");
-            result.setSuccess(false);
-        }
-        return JSONObject.toJSONString(result);
-    }
+
     @RequestMapping(value = "/goods/select", method = RequestMethod.POST)
     @ResponseBody
     public String select(Integer gid) throws IOException {
@@ -166,9 +142,9 @@ public class GoodsController {
             l.add(String.valueOf(item.getGname()));
             l.add(String.valueOf(item.getGprice()));
             l.add(String.valueOf(item.getGdescription()));
-            l.add(String.valueOf(item.getGstock()));
             l.add(String.valueOf(item.getGpicture()));
-            l.add(String.valueOf(item.getGuserid()));
+            l.add(String.valueOf(item.getGstuNo()));
+            l.add(String.valueOf(item.getGtime()));
             lists.add(l);
         }
         result.setData(lists);
@@ -247,9 +223,9 @@ public class GoodsController {
             l.add(String.valueOf(item.getGname()));
             l.add(String.valueOf(item.getGprice()));
             l.add(String.valueOf(item.getGdescription()));
-            l.add(String.valueOf(item.getGstock()));
             l.add(String.valueOf(item.getGpicture()));
-            l.add(String.valueOf(item.getGuserid()));
+            l.add(String.valueOf(item.getGstuNo()));
+            l.add(String.valueOf(item.getGtime()));
             lists.add(l);
         }
         result.setData(lists);
