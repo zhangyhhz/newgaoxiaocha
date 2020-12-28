@@ -2,20 +2,20 @@ package com.gaoxiaocha.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gaoxiaocha.dto.Result;
-import com.gaoxiaocha.pojo.Dynamics;
-import com.gaoxiaocha.pojo.Friend;
 import com.gaoxiaocha.pojo.Goods;
 import com.gaoxiaocha.service.GoodsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class GoodsController {
@@ -23,9 +23,29 @@ public class GoodsController {
     private GoodsService goodsService;
     @RequestMapping(value = "/goods/insert", method = RequestMethod.POST)
     @ResponseBody
-    public String insert(String gname,Double gprice,String gdescription,Integer gstock,String gpicture,Integer guserid) throws IOException {
-        gpicture = goodsService.shangchuantupian(gpicture);
-        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,gpicture,guserid);
+    public String insert(@RequestParam("name") String gname,
+                         @RequestParam("price")Double gprice,
+                         String gdescription,
+                         @RequestParam("stock")Integer gstock,
+                         @RequestParam("img") MultipartFile gpicture,
+                         @RequestParam("userId")Integer guserid) throws IOException {
+
+        if(gdescription==null){
+            gdescription = "没有描述";
+        }
+        String folder = "media";
+        File file1 = new File(folder);
+        if (!file1.exists()) {
+            file1.mkdirs();
+        }
+        String filename =  UUID.randomUUID().toString()+gpicture
+                .getOriginalFilename()
+                .substring(gpicture.getOriginalFilename().lastIndexOf('.'));
+        File file = new File(file1.getAbsolutePath()+File.separator+filename);
+        gpicture.transferTo(file);
+        //gpicture = goodsService.shangchuantupian(gpicture);
+        Goods goods = new Goods(null,gname,gprice,gdescription,gstock,
+                file1.getAbsolutePath()+File.separator+filename,guserid);
         Result result = new Result();
         if(goodsService.charu(goods)==1){
             result.setMsg("插入商品成功！");
@@ -96,13 +116,9 @@ public class GoodsController {
         goods = goodsService.chazhao(goods);
         File file = new File(goods.getGpicture());
         FileInputStream fis = new FileInputStream(file);
-        byte[] bs=new byte[1024];
-        int len;
-        StringBuilder sb = new StringBuilder();
-        while ((len = fis.read(bs))!=-1) {
-            sb.append(new String(bs, 0, len));
-        }
-        goods.setGpicture(sb.toString().replaceAll(" ", "+"));
+        byte[] bs=new byte[fis.available()];
+        fis.read(bs);
+        goods.setGpicture("data:image/jpeg;base64,"+Base64.getEncoder().encodeToString(bs));
             result.setMsg("查询成功！");
             result.setData(goods);
             result.setSuccess(true);
@@ -122,13 +138,9 @@ public class GoodsController {
             for(Goods goods:chazhaosuoyou){
                 File file = new File(goods.getGpicture());
                 FileInputStream fis = new FileInputStream(file);
-                byte[] bs=new byte[1024];
-                int len;
-                StringBuilder sb = new StringBuilder();
-                while ((len = fis.read(bs))!=-1) {
-                    sb.append(new String(bs, 0, len));
-                }
-                goods.setGpicture(sb.toString());
+                byte[] bs=new byte[fis.available()];
+                fis.read(bs);
+                goods.setGpicture("data:image/jpeg;base64,"+Base64.getEncoder().encodeToString(bs));
             }
             result.setMsg("查询成功！");
             result.setData(chazhaosuoyou);

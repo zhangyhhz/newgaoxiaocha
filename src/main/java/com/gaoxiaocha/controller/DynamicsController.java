@@ -40,7 +40,8 @@ public class DynamicsController {
     public String publish(@RequestParam("id")Integer userId,
                           @RequestParam("name")String userName,
                           @RequestParam("content")String content,
-                          @RequestParam("img")String img){
+                          @RequestParam("img")String img,
+                          @RequestParam("location")String location){
         Result result = new Result();
         if (userId==null){
 
@@ -52,7 +53,7 @@ public class DynamicsController {
             return JSONObject.toJSONString(result);
         }
 
-        int dynamicsID = dynamicsService.publish(userId, userName, content, img);
+        int dynamicsID = dynamicsService.publish(userId, userName, content, img,location);
         if (dynamicsID==-1){
             result.setMsg("发布失败!");
         }else {

@@ -30,4 +30,6 @@ public class Dynamics {
     Integer commentCount;
 
     Integer likeCount;
+
+    String location;
 }

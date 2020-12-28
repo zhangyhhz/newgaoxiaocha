@@ -33,12 +33,13 @@ public class DynamicsService {
     @Resource
     private CommentsMapper commentsMapper;
 
-    public int publish(int userId, String userName, String content, String img){
+    public int publish(int userId, String userName, String content, String img,String location){
         Dynamics dynamics = new Dynamics();
         dynamics.setUserId(userId);
         dynamics.setUserName(userName);
         dynamics.setContent(content);
         dynamics.setImg(img);
+        dynamics.setLocation(location);
         dynamics.setGmtCreate(System.currentTimeMillis());
         dynamics.setCommentCount(0);
         dynamics.setLikeCount(0);
